@@ -1,0 +1,56 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  transition: transform 0.3s ease-out;
+  /*scrollbar-width: thin;
+  scrollbar-color: #19adb8 #0f172a; for firefox */
+}
+
+a {
+  text-decoration: none;
+}
+
+@keyframes rotateY {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+@keyframes fadeInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-left {
+  animation: fadeInFromLeft 1s ease-out forwards;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #004071;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #19adb8;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1cd1de;
+}
