@@ -5,11 +5,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import LogoutButton from '../auth/LogoutButton';
 import { Menu, X, Users, FileText, LayoutDashboard, Calendar, ClipboardList, UserCircle, UsersIcon, CircleUser, Hospital, Package, Boxes, Receipt, Wallet, Star, ChevronDown, ChevronRight } from 'lucide-react';
+import { usePermissions } from '@/hooks/usePermissions';
 
 export default function SideNavbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [expandedMenus, setExpandedMenus] = useState({});
     const pathname = usePathname();
+    const { hasModuleAccess, loading } = usePermissions();
 
     const getCurrentRole = () => {
         if (pathname.startsWith('/admin')) return 'admin';
@@ -34,82 +36,89 @@ export default function SideNavbar() {
 
     const roleNavItems = {
         admin: [
-            { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-            { href: '/admin/users', label: 'Users', icon: Users },
-            { href: '/admin/leads', label: 'Leads', icon: FileText },
+            { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard, module: null },
+            { href: '/admin/users', label: 'Users', icon: Users, module: 'users' },
+            { href: '/admin/leads', label: 'Leads', icon: FileText, module: 'leads' },
             //{ href: '/admin/lead-integrations', label: 'Lead Integrations', icon: FileText },
-            { href: '/admin/patients', label: 'Patients', icon: Users },
-            { href: '/admin/pipeline', label: 'Pipeline', icon: FileText },
-            { href: '/admin/calendar', label: 'Calendar', icon: Calendar },
-            { href: '/admin/hospitals', label: 'Hospitals', icon: Hospital },
+            { href: '/admin/patients', label: 'Patients', icon: Users, module: 'patients' },
+            { href: '/admin/pipeline', label: 'Pipeline', icon: FileText, module: 'pipeline' },
+            { href: '/admin/calendar', label: 'Calendar', icon: Calendar, module: 'calendar' },
+            { href: '/admin/hospitals', label: 'Hospitals', icon: Hospital, module: 'hospitals' },
             {
                 label: 'Machines',
                 icon: Package,
+                module: 'machines',
                 children: [
                     { href: '/admin/machines', label: 'Inventory' },
                     { href: '/admin/machines/showcase', label: 'Machine Showcase' }
                 ]
             },
-            { href: '/admin/consumables', label: 'Consumables', icon: Boxes },
-            { href: '/admin/finance', label: 'Finance', icon: Wallet },
-            { href: '/admin/billing', label: 'Billing', icon: Receipt },
-            { href: '/admin/reviews', label: 'Reviews', icon: Star },
+            { href: '/admin/consumables', label: 'Consumables', icon: Boxes, module: 'consumables' },
+            { href: '/admin/finance', label: 'Finance', icon: Wallet, module: 'finance' },
+            { href: '/admin/billing', label: 'Billing', icon: Receipt, module: 'billing' },
+            { href: '/admin/reviews', label: 'Reviews', icon: Star, module: 'reviews' },
         ],
         sales: [
-            { href: '/sales/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-            { href: '/sales/leads', label: 'Leads', icon: UsersIcon },
-            { href: '/sales/patients', label: 'Patients', icon: CircleUser },
-            { href: '/sales/hospitals', label: 'Hospitals', icon: Hospital },
+            { href: '/sales/dashboard', label: 'Dashboard', icon: LayoutDashboard, module: null },
+            { href: '/sales/leads', label: 'Leads', icon: UsersIcon, module: 'leads' },
+            { href: '/sales/patients', label: 'Patients', icon: CircleUser, module: 'patients' },
+            { href: '/sales/pipeline', label: 'Pipeline', icon: FileText, module: 'pipeline' },
+            { href: '/sales/calendar', label: 'Calendar', icon: Calendar, module: 'calendar' },
+            { href: '/sales/hospitals', label: 'Hospitals', icon: Hospital, module: 'hospitals' },
             {
                 label: 'Machines',
                 icon: Package,
+                module: 'machines',
                 children: [
                     { href: '/sales/machines/showcase', label: 'Machine Showcase' }
                 ]
             },
-            { href: '/sales/consumables', label: 'Consumables', icon: Boxes },
+            { href: '/sales/consumables', label: 'Consumables', icon: Boxes, module: 'consumables' },
+            { href: '/sales/billing', label: 'Billing', icon: Receipt, module: 'billing' },
         ],
         ops: [
-            { href: '/ops/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-            { href: '/ops/leads', label: 'Leads', icon: UsersIcon },
-            { href: '/ops/patients', label: 'Patients', icon: CircleUser },
-            { href: '/ops/pipeline', label: 'Pipeline', icon: FileText },
-            { href: '/ops/calendar', label: 'Calendar', icon: Calendar },
-            { href: '/ops/hospitals', label: 'Hospitals', icon: Hospital },
+            { href: '/ops/dashboard', label: 'Dashboard', icon: LayoutDashboard, module: null },
+            { href: '/ops/leads', label: 'Leads', icon: UsersIcon, module: 'leads' },
+            { href: '/ops/patients', label: 'Patients', icon: CircleUser, module: 'patients' },
+            { href: '/ops/pipeline', label: 'Pipeline', icon: FileText, module: 'pipeline' },
+            { href: '/ops/calendar', label: 'Calendar', icon: Calendar, module: 'calendar' },
+            { href: '/ops/hospitals', label: 'Hospitals', icon: Hospital, module: 'hospitals' },
             {
                 label: 'Machines',
                 icon: Package,
+                module: 'machines',
                 children: [
                     { href: '/ops/machines', label: 'Inventory' },
                     { href: '/ops/machines/showcase', label: 'Machine Showcase' }
                 ]
             },
-            { href: '/ops/consumables', label: 'Consumables', icon: Boxes },
-            { href: '/ops/finance', label: 'Finance', icon: Wallet },
-            { href: '/ops/billing', label: 'Billing', icon: Receipt },
+            { href: '/ops/consumables', label: 'Consumables', icon: Boxes, module: 'consumables' },
+            { href: '/ops/finance', label: 'Finance', icon: Wallet, module: 'finance' },
+            { href: '/ops/billing', label: 'Billing', icon: Receipt, module: 'billing' },
         ],
         carebuddy: [
-            { href: '/carebuddy/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-            { href: '/carebuddy/patients', label: 'Patients', icon: CircleUser },
-            { href: '/carebuddy/pipeline', label: 'Pipeline', icon: FileText },
-            { href: '/carebuddy/calendar', label: 'Calendar', icon: Calendar },
+            { href: '/carebuddy/dashboard', label: 'Dashboard', icon: LayoutDashboard, module: null },
+            { href: '/carebuddy/patients', label: 'Patients', icon: CircleUser, module: 'patients' },
+            { href: '/carebuddy/pipeline', label: 'Pipeline', icon: FileText, module: 'pipeline' },
+            { href: '/carebuddy/calendar', label: 'Calendar', icon: Calendar, module: 'calendar' },
             {
                 label: 'Machines',
                 icon: Package,
+                module: 'machines',
                 children: [
                     { href: '/carebuddy/machines/showcase', label: 'Machine Showcase' }
                 ]
             },
-            { href: '/carebuddy/consumables', label: 'Consumables', icon: Boxes },
+            { href: '/carebuddy/consumables', label: 'Consumables', icon: Boxes, module: 'consumables' },
         ],
         accountant: [
-            { href: '/accountant/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-            { href: '/accountant/finance', label: 'Finance', icon: Wallet },
-            { href: '/accountant/billing', label: 'Billing', icon: Receipt },
+            { href: '/accountant/dashboard', label: 'Dashboard', icon: LayoutDashboard, module: null },
+            { href: '/accountant/finance', label: 'Finance', icon: Wallet, module: 'finance' },
+            { href: '/accountant/billing', label: 'Billing', icon: Receipt, module: 'billing' },
         ],
         outsourcing: [
-            { href: '/outsourcing/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-            { href: '/outsourcing/leads', label: 'Leads', icon: UsersIcon },
+            { href: '/outsourcing/dashboard', label: 'Dashboard', icon: LayoutDashboard, module: null },
+            { href: '/outsourcing/leads', label: 'Leads', icon: UsersIcon, module: 'leads' },
         ],
     };
 
@@ -132,11 +141,30 @@ export default function SideNavbar() {
     };
 
     const navItems = roleNavItems[currentRole] || [];
+    
+    // Filter nav items based on permissions
+    const filteredNavItems = navItems.filter(item => {
+        // Always show dashboard
+        if (!item.module) return true;
+        // Check if user has access to this module
+        return hasModuleAccess(item.module);
+    });
+    
     const colors = roleColors[currentRole];
     const panelLabel = roleLabels[currentRole];
 
     const isActive = (path) => pathname === path;
     const isChildActive = (children) => children.some(child => pathname === child.href);
+
+    // Show loading state while permissions are being fetched
+    if (loading) {
+        return (
+            <>
+                <div className="hidden md:block md:w-64" />
+                <div className="md:hidden h-16" />
+            </>
+        );
+    }
 
     return (
         <>
@@ -178,7 +206,7 @@ export default function SideNavbar() {
                     </div>
 
                     <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto">
-                        {navItems.map((item) => {
+                        {filteredNavItems.map((item) => {
                             const Icon = item.icon;
                             const hasChildren = item.children && item.children.length > 0;
                             const isExpanded = expandedMenus[item.label] || isChildActive(item.children || []);
