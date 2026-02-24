@@ -284,7 +284,7 @@ async function handlePut(request, context, user) {
         'email', 'phone', 'alternate_phone', 'address', 'city', 'state', 'postal_code', 'country',
         'emergency_contact_name', 'emergency_contact_phone', 'emergency_contact_relation',
         'primary_doctor_id', 'primary_hospital_id', 'medical_record_number',
-        'referred_by_role', 'referred_by_id', 'uhid', 'ip_number', 'notes'
+        'referred_by_role', 'referred_by_id', 'uhid', 'ip_number', 'notes', 'is_active'
     ];
 
     // Whitelist update fields to prevent SQL injection
@@ -300,11 +300,16 @@ async function handlePut(request, context, user) {
     const patientFields = Object.keys(patientUpdates);
     if (patientFields.length > 0) {
         const setClause = patientFields.map(f => `${f} = ?`).join(", ");
-        // Convert empty strings to null for integer fields
+        // Convert empty strings to null for integer and unique fields
         const integerFields = ['primary_doctor_id', 'primary_hospital_id', 'age', 'referred_by_id'];
+        const uniqueStringFields = ['medical_record_number', 'uhid', 'ip_number', 'email'];
         const values = patientFields.map(f => {
             const val = patientUpdates[f];
             if (integerFields.includes(f) && (val === '' || val === undefined)) {
+                return null;
+            }
+            // Convert empty strings to null for unique fields to avoid duplicate empty string errors
+            if (uniqueStringFields.includes(f) && val === '') {
                 return null;
             }
             return val;
@@ -418,7 +423,7 @@ async function handlePut(request, context, user) {
     });
 }
 
-// DELETE - Delete patient (soft delete)
+// DELETE - Delete patient (permanent delete with cascade)
 async function handleDelete(request, context, user) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
@@ -432,10 +437,25 @@ async function handleDelete(request, context, user) {
         return NextResponse.json({ message: "Patient not found" }, { status: 404 });
     }
 
-    // Soft delete
-    await query("UPDATE patients SET is_active = 0, updated_at = NOW() WHERE id = ?", [id]);
+    // Delete all related records first (cascade delete)
+    await Promise.all([
+        query("DELETE FROM patient_surgeries WHERE patient_id = ?", [id]),
+        query("DELETE FROM patient_activities WHERE patient_id = ?", [id]),
+        query("DELETE FROM patient_payments WHERE patient_id = ?", [id]),
+        query("DELETE FROM patient_notes WHERE patient_id = ?", [id]),
+        query("DELETE FROM patient_documents WHERE patient_id = ?", [id]),
+        query("DELETE FROM patient_allergies WHERE patient_id = ?", [id]),
+        query("DELETE FROM patient_medical_history WHERE patient_id = ?", [id]),
+        query("DELETE FROM patient_medications WHERE patient_id = ?", [id]),
+        query("DELETE FROM patient_insurance WHERE patient_id = ?", [id])
+    ]);
 
-    return NextResponse.json({ message: "Patient deleted successfully" });
+    // Delete the patient record
+    await query("DELETE FROM patients WHERE id = ?", [id]);
+
+    return NextResponse.json({ 
+        message: "Patient and all related records deleted permanently"
+    });
 }
 
 const handler = withPermission(MODULES.PATIENTS, {
