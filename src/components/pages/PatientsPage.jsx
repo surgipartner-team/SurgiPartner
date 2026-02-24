@@ -68,11 +68,11 @@ export default function PatientsPage() {
     const handleDeletePatient = async () => {
         if (!selectedPatient) return;
         try {
-            await axios.delete(`${API_ENDPOINTS.PATIENTS}?id=${selectedPatient.id}`);
+            const response = await axios.delete(`${API_ENDPOINTS.PATIENTS}?id=${selectedPatient.id}`);
             fetchPatients();
             setShowDeleteModal(false);
             setSelectedPatient(null);
-            toast.success('Patient deleted successfully!');
+            toast.success(response.data.message || 'Patient deleted successfully');
         } catch (error) {
             toast.error(error.response?.data?.message || 'Error deleting patient');
         }
