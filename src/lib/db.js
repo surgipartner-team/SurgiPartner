@@ -30,7 +30,29 @@ export async function query(sql, params) {
     return results;
   } catch (error) {
     console.error('Database query error:', error);
-    throw new Error('Database operation failed');
+    
+    // Provide specific error messages based on error codes
+    if (error.code === 'ER_DUP_ENTRY') {
+      const match = error.sqlMessage?.match(/Duplicate entry '(.*)' for key '.*\.(.*)'/);
+      const field = match ? match[2].replace(/_/g, ' ') : 'field';
+      const value = match && match[1] ? match[1] : 'value';
+      throw new Error(`Duplicate ${field}: ${value || 'This value'} already exists`);
+    }
+    
+    if (error.code === 'ER_NO_REFERENCED_ROW_2') {
+      throw new Error('Referenced record does not exist');
+    }
+    
+    if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+      throw new Error('Cannot delete: Record is being used by other data');
+    }
+    
+    if (error.code === 'ER_BAD_FIELD_ERROR') {
+      throw new Error('Invalid field in database query');
+    }
+    
+    // Generic fallback with error code
+    throw new Error(error.sqlMessage || error.message || 'Database operation failed');
   }
 }
 
