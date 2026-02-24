@@ -12,7 +12,8 @@ export const MODULES = {
     FINANCE: 'finance',
     USERS: 'users',
     ANALYTICS: 'analytics',
-    REVIEWS: 'reviews'
+    REVIEWS: 'reviews',
+    CALENDAR: 'calendar'
 };
 
 // Action types
@@ -82,7 +83,6 @@ export const DEFAULT_PERMISSIONS = {
     },
     outsourcing: {
         leads: ['view', 'create', 'edit'],
-        users: ['view']
     },
     patient: {
         reviews: ['create', 'view'],
