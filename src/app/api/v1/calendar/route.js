@@ -145,7 +145,7 @@ async function handleGet(request, context, user) {
                         title: `Follow-up: ${lead.name}`,
                         type: 'lead_followup',
                         date: dateStr,
-                        time: new Date(lead.next_followup_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+                        time: new Date(lead.next_followup_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' }),
                         details: `Status: ${lead.status} | Source: ${lead.source}`,
                         lead_id: lead.id,
                         status: 'warning', // Amber/Yellow
@@ -220,7 +220,7 @@ async function handleGet(request, context, user) {
                         case_id: caseItem.id,
                         type: type,
                         date: dateStr,
-                        time: timeStr || new Date(dateStrOriginal).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+                        time: timeStr || new Date(dateStrOriginal).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' }),
                         patient_name: `${caseItem.first_name} ${caseItem.last_name}`,
                         title: title || `${caseItem.first_name} ${caseItem.last_name} - ${type}`,
                         details: `${caseItem.surgery_type} (${caseItem.status})`,
