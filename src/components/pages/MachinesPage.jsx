@@ -236,7 +236,7 @@ export default function MachinesPage() {
                         {/* Card Header with Icon */}
                         <div className="p-6 border-b border-gray-100">
                             <div className="flex items-start justify-between mb-1">
-                                <div className="w-16 h-16 bg-gray-50 rounded-xl flex items-center justify-center shadow-sm overflow-hidden border border-gray-100">
+                                <div className="relative w-16 h-16 bg-gray-50 rounded-xl flex items-center justify-center shadow-sm overflow-hidden border border-gray-100">
                                     {machine.image_url ? (
                                         <Image src={machine.image_url} alt={machine.machine_name} fill className="object-cover" unoptimized />
                                     ) : (
