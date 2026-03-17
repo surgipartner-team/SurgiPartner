@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import axios from 'axios';
 import { API_ENDPOINTS } from '@/lib/constants';
 import { Building2, MapPin, Phone, Mail, User2Icon, Award, Percent, Activity, ArrowLeft, Calendar, Stethoscope, Clock, Briefcase, Package, Receipt } from 'lucide-react';
@@ -179,12 +180,14 @@ export default function HospitalDetailPage({ id }) {
                         {hospital.surgeons.map((surgeon, index) => (
                             <div key={index} className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden flex flex-col md:flex-row h-full">
                                 {/* Surgeon Image / Placeholder */}
-                                <div className="w-full md:w-32 bg-gray-100 shrink-0 flex items-center justify-center md:border-r border-gray-100">
+                                <div className="w-full md:w-32 bg-gray-100 shrink-0 flex items-center justify-center md:border-r border-gray-100 relative h-48 md:h-full overflow-hidden">
                                     {surgeon.image ? (
-                                        <img
+                                        <Image
                                             src={surgeon.image}
                                             alt={surgeon.name}
-                                            className="w-full h-48 md:h-full object-cover"
+                                            fill
+                                            className="object-cover"
+                                            unoptimized
                                         />
                                     ) : (
                                         <User2Icon className="w-12 h-12 text-gray-300" />

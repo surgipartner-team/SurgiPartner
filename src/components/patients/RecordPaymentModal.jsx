@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { X, DollarSign } from 'lucide-react';
 
-export default function RecordPaymentModal({ isOpen, onClose, patientName, onSubmit }) {
+export default function RecordPaymentModal({ isOpen, onClose, invoice, onSubmit }) {
     const [amount, setAmount] = useState('');
     const [paymentDate, setPaymentDate] = useState(new Date().toISOString().split('T')[0]);
     const [paymentMethod, setPaymentMethod] = useState('cash');
@@ -11,14 +11,23 @@ export default function RecordPaymentModal({ isOpen, onClose, patientName, onSub
     const [notes, setNotes] = useState('');
     const [loading, setLoading] = useState(false);
 
-    if (!isOpen) return null;
+    if (!isOpen || !invoice) return null;
+
+    const balanceDue = Number(invoice.total_amount) - Number(invoice.paid_amount);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        const numAmount = parseFloat(amount);
+        if (numAmount > balanceDue) {
+            alert(`Payment amount (${numAmount}) cannot exceed the Balance Due (${balanceDue}).`);
+            return;
+        }
+
         setLoading(true);
 
         const paymentData = {
-            amount: parseFloat(amount),
+            amount: numAmount,
             payment_date: paymentDate,
             payment_method: paymentMethod,
             payment_status: 'completed',
@@ -44,7 +53,7 @@ export default function RecordPaymentModal({ isOpen, onClose, patientName, onSub
                 <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
                     <div>
                         <h2 className="text-2xl font-bold text-gray-900">Record Payment</h2>
-                        <p className="text-sm text-gray-600 mt-1">Add payment for {patientName}</p>
+                        <p className="text-sm text-gray-600 mt-1">Add payment for {invoice.customer_name} ({invoice.invoice_number})</p>
                     </div>
                     <button
                         onClick={onClose}
@@ -56,9 +65,16 @@ export default function RecordPaymentModal({ isOpen, onClose, patientName, onSub
 
                 <form onSubmit={handleSubmit} className="p-6">
                     {/* Amount */}
+                    <div className="mb-6 bg-blue-50 p-4 rounded-xl border border-blue-100 flex justify-between items-center">
+                        <div>
+                            <p className="text-sm text-blue-800 font-medium mb-1">Total Amount: ₹{Number(invoice.total_amount).toLocaleString('en-IN')}</p>
+                            <p className="text-lg text-red-600 font-bold">Balance Due: ₹{balanceDue.toLocaleString('en-IN')}</p>
+                        </div>
+                    </div>
+
                     <div className="mb-6">
                         <label className="block text-sm font-semibold text-gray-900 mb-2">
-                            Amount <span className="text-red-500">*</span>
+                            Amount to Pay <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">

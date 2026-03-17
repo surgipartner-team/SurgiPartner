@@ -52,7 +52,7 @@ export default function AdminReviewsPage() {
                         <span className="text-sm font-bold">{rating || '-'}</span>
                     </div>
                 </div>
-                {review && <p className="text-sm text-gray-600 italic">"{review}"</p>}
+                {review && <p className="text-sm text-gray-600 italic">&quot;{review}&quot;</p>}
             </div>
         );
     };
@@ -123,7 +123,7 @@ export default function AdminReviewsPage() {
                                 {review.overall_review && (
                                     <div className="mb-6 bg-blue-50 p-4 rounded-xl border border-blue-100">
                                         <h4 className="text-sm font-bold text-[#004071] mb-1">Overall Experience</h4>
-                                        <p className="text-gray-800">"{review.overall_review}"</p>
+                                        <p className="text-gray-800">&quot;{review.overall_review}&quot;</p>
                                     </div>
                                 )}
 

@@ -95,7 +95,7 @@ export default function AccountantDashboard() {
                     <h1 className="text-2xl font-bold text-gray-900">
                         Welcome back, {user?.username || 'Accountant'}
                     </h1>
-                    <p className="text-gray-500">Here's your performance overview for today</p>
+                    <p className="text-gray-500">Here&apos;s your performance overview for today</p>
                 </div>
 
                 {/* Stats Cards */}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import axios from 'axios';
 import { API_ENDPOINTS } from '@/lib/constants';
 import { Search, Package, TrendingUp, ShoppingCart, Box, Activity, Plus, Edit2, Trash2, X } from 'lucide-react';
@@ -237,7 +238,7 @@ export default function MachinesPage() {
                             <div className="flex items-start justify-between mb-1">
                                 <div className="w-16 h-16 bg-gray-50 rounded-xl flex items-center justify-center shadow-sm overflow-hidden border border-gray-100">
                                     {machine.image_url ? (
-                                        <img src={machine.image_url} alt={machine.machine_name} className="w-full h-full object-cover" />
+                                        <Image src={machine.image_url} alt={machine.machine_name} fill className="object-cover" unoptimized />
                                     ) : (
                                         <Package className="text-[#004071]" size={28} />
                                     )}
@@ -508,7 +509,7 @@ function AddMachineDialog({ onClose, onSubmit, hospitals }) {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Machine Image</label>
                         {imagePreview ? (
                             <div className="relative w-full h-48">
-                                <img src={imagePreview} alt="Preview" className="w-full h-full object-contain rounded-lg border border-gray-300 bg-gray-50" />
+                                <Image src={imagePreview} alt="Preview" fill className="object-contain rounded-lg border border-gray-300 bg-gray-50" unoptimized />
                                 <button
                                     type="button"
                                     onClick={removeImage}
@@ -968,7 +969,7 @@ function EditMachineDialog({ machine, onClose, onSubmit, hospitals }) {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Machine Image</label>
                         {imagePreview ? (
                             <div className="relative w-full h-48">
-                                <img src={imagePreview} alt="Preview" className="w-full h-full object-contain rounded-lg border border-gray-300 bg-gray-50" />
+                                <Image src={imagePreview} alt="Preview" fill className="object-contain rounded-lg border border-gray-300 bg-gray-50" unoptimized />
                                 <button
                                     type="button"
                                     onClick={removeImage}

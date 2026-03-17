@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { API_ENDPOINTS } from '@/lib/constants';
 import { Search, Users, Mail, Phone, Calendar } from 'lucide-react';
@@ -20,11 +20,7 @@ export default function OutsourcingUsers() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    fetchUsers();
-  }, [search]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -36,7 +32,13 @@ export default function OutsourcingUsers() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+
 
   const formatDate = (date) => {
     if (!date) return '-';

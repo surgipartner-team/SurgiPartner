@@ -44,6 +44,7 @@ export default function PatientDetailPage() {
 
     useEffect(() => {
         fetchPatientDetails();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [patientId]);
 
     useEffect(() => {
@@ -53,6 +54,7 @@ export default function PatientDetailPage() {
             if (activeTab === 'documents') fetchDocuments();
             if (activeTab === 'payments') fetchPayments();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeTab, patient]);
 
     const fetchPatientDetails = async () => {

@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import axios from 'axios';
 import { API_ENDPOINTS } from '@/lib/constants';
 import { Search, Package, MapPin, Calendar, Activity, Info } from 'lucide-react';
@@ -13,11 +14,7 @@ export default function MachineShowcasePage() {
     const [statusFilter, setStatusFilter] = useState('all');
     const [categoryFilter, setCategoryFilter] = useState('all');
 
-    useEffect(() => {
-        fetchMachines();
-    }, [statusFilter, categoryFilter, searchQuery]);
-
-    const fetchMachines = async () => {
+    const fetchMachines = useCallback(async () => {
         try {
             setLoading(true);
             const params = new URLSearchParams();
@@ -32,7 +29,11 @@ export default function MachineShowcasePage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [statusFilter, categoryFilter, searchQuery]);
+
+    useEffect(() => {
+        fetchMachines();
+    }, [fetchMachines]);
 
     const formatCurrency = (val) => val ? `₹${Number(val).toLocaleString('en-IN')}` : '₹0';
     const formatDate = (date) => date ? new Date(date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
@@ -96,10 +97,12 @@ export default function MachineShowcasePage() {
                         {/* Image Section */}
                         <div className="relative h-64 bg-gray-100 border-b border-gray-100 group">
                             {machine.image_url ? (
-                                <img
+                                <Image
                                     src={machine.image_url}
                                     alt={machine.machine_name}
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    fill
+                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                    unoptimized
                                 />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center flex-col text-gray-400">

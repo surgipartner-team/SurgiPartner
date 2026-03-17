@@ -189,7 +189,7 @@ export default function AdminDashboard() {
       <div className="p-6 max-w-7xl mx-auto space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Welcome back, Admin User</h1>
-          <p className="text-gray-500">Here's your performance overview for today</p>
+          <p className="text-gray-500">Here&apos;s your performance overview for today</p>
         </div>
 
         {/* Top Stats Row */}
@@ -544,7 +544,7 @@ const DonutChart = ({ data }) => {
 
   if (total === 0) return <div className="h-64 flex items-center justify-center text-gray-400">No data</div>;
 
-  let currentAngle = 0;
+  let runningAngle = 0;
   const r = 80;
   const c = 100;
   const strokeWidth = 25;
@@ -556,8 +556,10 @@ const DonutChart = ({ data }) => {
         {data.map((item, i) => {
           const percentage = item.value / total;
           const strokeDasharray = `${percentage * circumference} ${circumference}`;
+          const currentAngle = runningAngle;
           const strokeDashoffset = -currentAngle * circumference;
-          currentAngle += percentage;
+          // eslint-disable-next-line react-hooks/immutability
+          runningAngle += percentage;
           const color = colors[i % colors.length];
 
           return (

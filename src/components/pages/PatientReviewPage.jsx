@@ -5,6 +5,25 @@ import axios from 'axios';
 import { Star, X } from 'lucide-react';
 import { toast } from 'react-toastify';
 
+function StarRating({ value, onChange, label }) {
+    return (
+        <div className="mb-6">
+            <label className="block text-sm font-bold text-gray-700 mb-2">{label}</label>
+            <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                        key={star}
+                        onClick={() => onChange(star)}
+                        className={`p-1 transition-transform hover:scale-110 ${star <= value ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
+                    >
+                        <Star size={32} fill={star <= value ? "currentColor" : "none"} />
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
+}
+
 export default function PatientReviewPage({ patientId, surgeries, carebuddy, onClose }) {
     const [step, setStep] = useState(1);
     const [ratings, setRatings] = useState({
@@ -46,22 +65,6 @@ export default function PatientReviewPage({ patientId, surgeries, carebuddy, onC
         }
     };
 
-    const StarRating = ({ value, onChange, label }) => (
-        <div className="mb-6">
-            <label className="block text-sm font-bold text-gray-700 mb-2">{label}</label>
-            <div className="flex gap-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                        key={star}
-                        onClick={() => onChange(star)}
-                        className={`p-1 transition-transform hover:scale-110 ${star <= value ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
-                    >
-                        <Star size={32} fill={star <= value ? "currentColor" : "none"} />
-                    </button>
-                ))}
-            </div>
-        </div>
-    );
 
     const steps = [
         {

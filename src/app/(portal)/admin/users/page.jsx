@@ -517,6 +517,26 @@ function ResetPasswordModal({ user, onClose }) {
   );
 }
 
+const PERMISSION_GROUPS = {
+  leads: { label: 'Leads', actions: ['view', 'create', 'edit', 'delete', 'assign'] },
+  patients: { label: 'Patients', actions: ['view', 'create', 'edit', 'delete'] },
+  pipeline: { label: 'Pipeline', actions: ['view', 'create', 'manage'] },
+  hospitals: { label: 'Hospitals', actions: ['view', 'create', 'edit', 'delete'] },
+  machines: { label: 'Machines', actions: ['view', 'create', 'edit', 'delete'] },
+  consumables: { label: 'Consumables', actions: ['view', 'create', 'edit', 'delete'] },
+  billing: { label: 'Billing', actions: ['view', 'create', 'edit', 'delete', 'payments'] },
+  finance: { label: 'Finance', actions: ['view', 'export'] },
+  analytics: { label: 'Analytics', actions: ['view', 'export'] },
+  calendar: { label: 'Calendar', actions: ['view', 'manage'] },
+  users: { label: 'Users', actions: ['view', 'create', 'edit', 'delete'] },
+  reviews: { label: 'Reviews', actions: ['view', 'create', 'delete'] },
+};
+
+const ACTION_LABELS = {
+  view: 'View', create: 'Create', edit: 'Edit', delete: 'Delete',
+  assign: 'Assign', manage: 'Manage', payments: 'Record Payments', export: 'Export'
+};
+
 // Manage Permissions Modal
 function ManagePermissionsModal({ user, onClose, onSuccess }) {
   const [permissions, setPermissions] = useState({});
@@ -524,26 +544,6 @@ function ManagePermissionsModal({ user, onClose, onSuccess }) {
   const [summary, setSummary] = useState({ totalEnabled: 0, customAdded: 0, restricted: 0 });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-
-  const PERMISSION_GROUPS = {
-    leads: { label: 'Leads', actions: ['view', 'create', 'edit', 'delete', 'assign'] },
-    patients: { label: 'Patients', actions: ['view', 'create', 'edit', 'delete'] },
-    pipeline: { label: 'Pipeline', actions: ['view', 'create', 'manage'] },
-    hospitals: { label: 'Hospitals', actions: ['view', 'create', 'edit', 'delete'] },
-    machines: { label: 'Machines', actions: ['view', 'create', 'edit', 'delete'] },
-    consumables: { label: 'Consumables', actions: ['view', 'create', 'edit', 'delete'] },
-    billing: { label: 'Billing', actions: ['view', 'create', 'edit', 'delete', 'payments'] },
-    finance: { label: 'Finance', actions: ['view', 'export'] },
-    analytics: { label: 'Analytics', actions: ['view', 'export'] },
-    calendar: { label: 'Calendar', actions: ['view', 'manage'] },
-    users: { label: 'Users', actions: ['view', 'create', 'edit', 'delete'] },
-    reviews: { label: 'Reviews', actions: ['view', 'create', 'delete'] },
-  };
-
-  const ACTION_LABELS = {
-    view: 'View', create: 'Create', edit: 'Edit', delete: 'Delete',
-    assign: 'Assign', manage: 'Manage', payments: 'Record Payments', export: 'Export'
-  };
 
   useEffect(() => {
     const fetchPermissions = async () => {

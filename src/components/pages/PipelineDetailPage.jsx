@@ -70,6 +70,7 @@ export default function PipelineDetailPage() {
     useEffect(() => {
         fetchCaseDetails();
         fetchPayments(); // Fetch payments on initial load
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [caseId]);
 
     useEffect(() => {
@@ -83,6 +84,7 @@ export default function PipelineDetailPage() {
             if (activeTab === 'communication') { fetchActivities(); fetchNotes(); }
             if (activeTab === 'timeline') fetchActivities();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeTab, caseData]);
 
     const fetchCaseDetails = async () => {

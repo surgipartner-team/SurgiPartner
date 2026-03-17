@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import { Eye, EyeOff, Copy, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
@@ -16,34 +16,7 @@ function SecureViewContent() {
     const [showPassword, setShowPassword] = useState(false);
     const [timeLeft, setTimeLeft] = useState(null);
 
-    useEffect(() => {
-        if (!token) {
-            setError("Invalid Link");
-            setLoading(false);
-            return;
-        }
-
-        verifyToken();
-    }, [token]);
-
-    useEffect(() => {
-        if (data && data.exp) {
-            const interval = setInterval(() => {
-                const now = Math.floor(Date.now() / 1000);
-                const diff = data.exp - now;
-                if (diff <= 0) {
-                    setError("This link has expired.");
-                    setData(null);
-                    clearInterval(interval);
-                } else {
-                    setTimeLeft(diff);
-                }
-            }, 1000);
-            return () => clearInterval(interval);
-        }
-    }, [data]);
-
-    const verifyToken = async () => {
+    const verifyToken = useCallback(async () => {
         try {
             const response = await axios.post('/api/v1/secure-view/verify', { token });
             if (response.data.success) {
@@ -54,7 +27,17 @@ function SecureViewContent() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [token]);
+
+    useEffect(() => {
+        if (!token) {
+            setError("Invalid Link");
+            setLoading(false);
+            return;
+        }
+
+        verifyToken();
+    }, [token, verifyToken]);
 
     const copyToClipboard = (text, label) => {
         navigator.clipboard.writeText(text);
@@ -107,7 +90,7 @@ function SecureViewContent() {
                         <div>
                             <p className="text-sm font-semibold text-orange-900">This link expires in {formatTime(timeLeft)}</p>
                             <p className="text-xs text-orange-700">Please save your credentials immediately.</p>
-                            <p className="text-xs text-red-600 font-bold mt-1">Login credentials are confidential don't share to anyone</p>
+                            <p className="text-xs text-red-600 font-bold mt-1">Login credentials are confidential don&apos;t share to anyone</p>
                         </div>
                     </div>
 

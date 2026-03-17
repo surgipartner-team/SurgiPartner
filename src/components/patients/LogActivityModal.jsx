@@ -166,7 +166,7 @@ export default function LogActivityModal({ isOpen, onClose, patientName, onSubmi
                             </div>
                             <div>
                                 <p className="text-sm font-medium text-blue-900">Activity will be visible to:</p>
-                                <p className="text-sm text-blue-700 mt-1">All team members with access to this patient's record</p>
+                                <p className="text-sm text-blue-700 mt-1">All team members with access to this patient&apos;s record</p>
                             </div>
                         </div>
                     </div>

@@ -215,10 +215,18 @@ export default function BillingPage() {
             }];
 
             const newPaidAmount = Number(selectedInvoice.paid_amount) + Number(paymentData.amount);
+            const maxPermitted = Number(selectedInvoice.total_amount);
+
+            if (newPaidAmount > maxPermitted) {
+                toast.error(`Payment blocked: Cannot pay more than the balance due.`);
+                setLoading(false);
+                return;
+            }
+
             let newStatus = selectedInvoice.payment_status;
 
             // Auto-update status logic
-            if (newPaidAmount >= Number(selectedInvoice.total_amount)) {
+            if (newPaidAmount >= maxPermitted) {
                 newStatus = 'paid';
             } else if (newPaidAmount > 0) {
                 newStatus = 'partial';
@@ -815,9 +823,11 @@ export default function BillingPage() {
                                                     <button onClick={() => handleEditInvoice(invoice)} className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                                                         <Pencil size={16} /> Edit Invoice
                                                     </button>
-                                                    <button onClick={() => { setSelectedInvoice(invoice); setShowPaymentModal(true); setOpenDropdown(null); }} className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                                                        <CreditCard size={16} /> Record Payment
-                                                    </button>
+                                                    {invoice.payment_status !== 'paid' && (Number(invoice.total_amount) - Number(invoice.paid_amount) > 0) && (
+                                                        <button onClick={() => { setSelectedInvoice(invoice); setShowPaymentModal(true); setOpenDropdown(null); }} className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                                                            <CreditCard size={16} /> Record Payment
+                                                        </button>
+                                                    )}
                                                     <button onClick={() => handleDeleteInvoice(invoice)} className="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
                                                         <Trash2 size={16} /> Delete
                                                     </button>

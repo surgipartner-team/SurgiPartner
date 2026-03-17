@@ -52,7 +52,7 @@ export default function PatientDashboard() {
     if (!data) return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">No Patient Record Found</h1>
-            <p className="text-gray-600 mb-6">We couldn't find your patient record. Please contact support.</p>
+            <p className="text-gray-600 mb-6">We couldn&apos;t find your patient record. Please contact support.</p>
             <button onClick={handleLogout} className="px-6 py-2 bg-[#004071] text-white rounded-xl">Logout</button>
         </div>
     );

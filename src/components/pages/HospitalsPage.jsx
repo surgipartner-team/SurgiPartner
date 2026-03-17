@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { API_ENDPOINTS } from '@/lib/constants';
@@ -816,7 +817,7 @@ function AddHospitalDialog({ onClose, onSubmit }) {
                                         <div className="flex gap-2 items-center">
                                             {surgeon.image ? (
                                                 <div className="relative w-10 h-10 flex-shrink-0">
-                                                    <img src={surgeon.image} alt="Surgeon" className="w-full h-full object-cover rounded-lg border border-gray-200" />
+                                                    <Image src={surgeon.image} alt="Surgeon" fill className="object-cover rounded-lg border border-gray-200" unoptimized />
                                                     <button
                                                         type="button"
                                                         onClick={() => updateSurgeon(index, 'image', '')}
@@ -1268,7 +1269,7 @@ function EditHospitalDialog({ hospital, onClose, onSubmit }) {
                                         <div className="flex gap-2 items-center">
                                             {surgeon.image ? (
                                                 <div className="relative w-10 h-10 flex-shrink-0">
-                                                    <img src={surgeon.image} alt="Surgeon" className="w-full h-full object-cover rounded-lg border border-gray-200" />
+                                                    <Image src={surgeon.image} alt="Surgeon" fill className="object-cover rounded-lg border border-gray-200" unoptimized />
                                                     <button
                                                         type="button"
                                                         onClick={() => updateSurgeon(index, 'image', '')}

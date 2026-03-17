@@ -1601,6 +1601,7 @@ function LeadDetailDrawer({ lead, onClose }) {
     if (lead?.id) {
       fetchDocuments();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lead]);
 
   const fetchDocuments = async () => {

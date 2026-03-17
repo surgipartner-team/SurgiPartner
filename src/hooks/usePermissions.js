@@ -80,16 +80,13 @@ export function usePermissions() {
     const context = useContext(PermissionsContext);
 
     if (!context) {
-        // If not in provider, return standalone functionality
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         return useStandalonePermissions();
     }
 
     return context;
 }
 
-/**
- * Standalone hook for components not wrapped in PermissionsProvider
- */
 function useStandalonePermissions() {
     const [user, setUser] = useState(null);
     const [permissions, setPermissions] = useState({});

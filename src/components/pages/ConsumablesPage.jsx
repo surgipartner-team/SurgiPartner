@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { API_ENDPOINTS } from '@/lib/constants';
@@ -282,7 +283,7 @@ export default function ConsumablesPage() {
                             {/* Image */}
                             <div className="relative h-48 bg-gray-100">
                                 {item.image_url ? (
-                                    <img src={item.image_url} alt={item.item_name} className="w-full h-full object-cover" />
+                                    <Image src={item.image_url} alt={item.item_name} fill className="object-cover" unoptimized />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center">
                                         <Package className="text-gray-300" size={60} />
@@ -390,9 +391,9 @@ export default function ConsumablesPage() {
                                 <tr key={item.id} className="hover:bg-gray-50">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center relative overflow-hidden">
                                                 {item.image_url ? (
-                                                    <img src={item.image_url} alt="" className="w-full h-full object-cover rounded-lg" />
+                                                    <Image src={item.image_url} alt="" fill className="object-cover rounded-lg" unoptimized />
                                                 ) : (
                                                     <Package className="text-gray-400" size={20} />
                                                 )}
@@ -883,8 +884,8 @@ function AddConsumableDialog({ categories, onClose, onSubmit }) {
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
                             {imagePreview ? (
-                                <div className="relative">
-                                    <img src={imagePreview} alt="Preview" className="w-full h-32 object-cover rounded-lg border border-gray-300" />
+                                <div className="relative h-32 w-full">
+                                    <Image src={imagePreview} alt="Preview" fill className="object-cover rounded-lg border border-gray-300" unoptimized />
                                     <button
                                         type="button"
                                         onClick={removeImage}
@@ -1121,8 +1122,8 @@ function EditConsumableDialog({ consumable, categories, onClose, onSubmit }) {
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
                             {imagePreview ? (
-                                <div className="relative">
-                                    <img src={imagePreview} alt="Preview" className="w-full h-32 object-cover rounded-lg border border-gray-300" />
+                                <div className="relative h-32 w-full">
+                                    <Image src={imagePreview} alt="Preview" fill className="object-cover rounded-lg border border-gray-300" unoptimized />
                                     <button
                                         type="button"
                                         onClick={removeImage}

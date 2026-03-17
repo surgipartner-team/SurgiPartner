@@ -111,7 +111,7 @@ export default function OpsDashboard() {
             <div className="p-6 max-w-7xl mx-auto">
                 <div className="mb-8">
                     <h1 className="text-2xl font-bold text-gray-900">Welcome back, Ops Manager</h1>
-                    <p className="text-gray-500 mt-1">Here's your performance overview for today</p>
+                    <p className="text-gray-500 mt-1">Here&apos;s your performance overview for today</p>
                 </div>
 
                 {/* Stats Cards */}
@@ -277,7 +277,8 @@ const PipelineDonutChart = ({ data }) => {
                         const pct = (item.value / total);
                         const dashArray = `${pct * circumference} ${circumference}`;
                         const offset = currentOffset;
-                        currentOffset -= pct * circumference;
+                        // eslint-disable-next-line react-hooks/immutability
+                        currentOffset = currentOffset - (pct * circumference);
                         const color = distinctColors[index % distinctColors.length];
 
                         return (

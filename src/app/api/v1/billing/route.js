@@ -320,13 +320,20 @@ async function handlePut(request, context, user) {
         return NextResponse.json({ message: "No fields to update" }, { status: 400 });
     }
 
-    // RECALCULATION LOGIC FOR UPDATE
-    // If any calculation-affecting field is updated, we must recalculate totals
+
+    if ('paid_amount' in updates) {
+        if (Number(updates.paid_amount) > Number(existing[0].total_amount)) {
+            return NextResponse.json(
+                { message: `Data Integrity Error: Paid amount (${updates.paid_amount}) cannot exceed the total amount (${existing[0].total_amount}).` },
+                { status: 400 }
+            );
+        }
+    }
+
     const calcFields = ['line_items', 'tax_percentage', 'discount_percentage', 'tds_percentage'];
     const needsRecalc = fields.some(f => calcFields.includes(f));
 
     if (needsRecalc) {
-        // Merge current updates with existing values to calculate new totals
         const merged = { ...existing[0], ...updates };
 
         let subtotal = Number(merged.subtotal);
@@ -358,6 +365,16 @@ async function handlePut(request, context, user) {
         updates.discount_amount = discount_amt;
         updates.tds_amount = tds_amt;
         updates.total_amount = final_total;
+    }
+
+    const finalTotalAmount = updates.total_amount !== undefined ? updates.total_amount : existing[0].total_amount;
+    const finalPaidAmount = updates.paid_amount !== undefined ? updates.paid_amount : existing[0].paid_amount;
+    
+    if (Number(finalPaidAmount) > Number(finalTotalAmount)) {
+        return NextResponse.json(
+            { message: `Data Integrity Error: Paid amount (${finalPaidAmount}) cannot exceed the (new) total amount (${finalTotalAmount}). Please adjust the payment history or line items.` },
+            { status: 400 }
+        );
     }
 
     // Generate SET clause for ALL fields (user updates + calculated updates)

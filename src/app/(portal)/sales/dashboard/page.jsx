@@ -133,7 +133,7 @@ export default function SalesDashboard() {
             <div className="p-6 max-w-7xl mx-auto">
                 <div className="mb-8">
                     <h1 className="text-2xl font-bold text-gray-900">Welcome back, Sales Rep</h1>
-                    <p className="text-gray-500 mt-1">Here's your performance overview for today</p>
+                    <p className="text-gray-500 mt-1">Here&apos;s your performance overview for today</p>
                 </div>
 
                 {/* Stats Cards */}
@@ -202,7 +202,7 @@ export default function SalesDashboard() {
                 {/* Today's Call Queue */}
                 <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm mb-8">
                     <div className="mb-6">
-                        <h3 className="font-semibold text-gray-900">Today's Call Queue</h3>
+                        <h3 className="font-semibold text-gray-900">Today&apos;s Call Queue</h3>
                         <p className="text-sm text-gray-500">{data.callQueue.length} calls scheduled</p>
                     </div>
 
@@ -311,7 +311,8 @@ const LeadDistributionChart = ({ data }) => {
                         const pct = (item.value / total);
                         const dashArray = `${pct * circumference} ${circumference}`;
                         const offset = currentOffset;
-                        currentOffset -= pct * circumference;
+                        // eslint-disable-next-line react-hooks/immutability
+                        currentOffset = currentOffset - (pct * circumference);
                         const color = colors[index % colors.length];
 
                         return (
