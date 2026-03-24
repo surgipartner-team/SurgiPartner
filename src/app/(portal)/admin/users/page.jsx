@@ -518,18 +518,18 @@ function ResetPasswordModal({ user, onClose }) {
 }
 
 const PERMISSION_GROUPS = {
+  users: { label: 'Users', actions: ['view', 'create', 'edit', 'delete'] },
   leads: { label: 'Leads', actions: ['view', 'create', 'edit', 'delete', 'assign'] },
   patients: { label: 'Patients', actions: ['view', 'create', 'edit', 'delete'] },
   pipeline: { label: 'Pipeline', actions: ['view', 'create', 'manage'] },
+  calendar: { label: 'Calendar', actions: ['view', 'manage'] },
   hospitals: { label: 'Hospitals', actions: ['view', 'create', 'edit', 'delete'] },
   machines: { label: 'Machines', actions: ['view', 'create', 'edit', 'delete'] },
   consumables: { label: 'Consumables', actions: ['view', 'create', 'edit', 'delete'] },
-  billing: { label: 'Billing', actions: ['view', 'create', 'edit', 'delete', 'payments'] },
   finance: { label: 'Finance', actions: ['view', 'export'] },
-  analytics: { label: 'Analytics', actions: ['view', 'export'] },
-  calendar: { label: 'Calendar', actions: ['view', 'manage'] },
-  users: { label: 'Users', actions: ['view', 'create', 'edit', 'delete'] },
+  billing: { label: 'Billing', actions: ['view', 'create', 'edit', 'delete', 'payments'] },
   reviews: { label: 'Reviews', actions: ['view', 'create', 'delete'] },
+ // analytics: { label: 'Analytics', actions: ['view', 'export'] },
 };
 
 const ACTION_LABELS = {
@@ -644,8 +644,12 @@ function ManagePermissionsModal({ user, onClose, onSuccess }) {
               <span className="flex items-center gap-1"><div className="w-3 h-3 bg-red-500 rounded"></div> Restricted</span>
             </div>
 
-            {/* Permission Groups - Show ALL modules so admin can grant any permission to any role */}
-            {Object.entries(PERMISSION_GROUPS).map(([module, config]) => {
+            {/* Permission Groups - Show modules based on user role to avoid confusion */}
+            {Object.entries(PERMISSION_GROUPS).filter(([module]) => {
+              if (module === 'users' && user.role !== 'admin') return false;
+              if (module === 'reviews' && user.role !== 'admin' && user.role !== 'patient') return false;
+              return true;
+            }).map(([module, config]) => {
               const hasDefaultsForModule = defaultPermissions[module]?.length > 0;
               return (
                 <div key={module} className="border rounded-lg overflow-hidden">

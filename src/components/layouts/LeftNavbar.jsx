@@ -72,6 +72,7 @@ export default function SideNavbar() {
                     { href: '/sales/machines/showcase', label: 'Machine Showcase' }
                 ]
             },
+            { href: '/sales/finance', label: 'Finance', icon: Wallet, module: 'finance' },
             { href: '/sales/consumables', label: 'Consumables', icon: Boxes, module: 'consumables' },
             { href: '/sales/billing', label: 'Billing', icon: Receipt, module: 'billing' },
         ],
@@ -113,8 +114,6 @@ export default function SideNavbar() {
             { href: '/carebuddy/consumables', label: 'Consumables', icon: Boxes, module: 'consumables' },
             { href: '/carebuddy/billing', label: 'Billing', icon: Receipt, module: 'billing' },
             { href: '/carebuddy/finance', label: 'Finance', icon: Wallet, module: 'finance' },
-            { href: '/carebuddy/users', label: 'Users', icon: Users, module: 'users' },
-            { href: '/carebuddy/reviews', label: 'Reviews', icon: Star, module: 'reviews' },
         ],
         accountant: [
             { href: '/accountant/dashboard', label: 'Dashboard', icon: LayoutDashboard, module: null },
@@ -135,8 +134,6 @@ export default function SideNavbar() {
             { href: '/accountant/consumables', label: 'Consumables', icon: Boxes, module: 'consumables' },
             { href: '/accountant/finance', label: 'Finance', icon: Wallet, module: 'finance' },
             { href: '/accountant/billing', label: 'Billing', icon: Receipt, module: 'billing' },
-            { href: '/accountant/users', label: 'Users', icon: Users, module: 'users' },
-            { href: '/accountant/reviews', label: 'Reviews', icon: Star, module: 'reviews' },
         ],
         outsourcing: [
             { href: '/outsourcing/dashboard', label: 'Dashboard', icon: LayoutDashboard, module: null },
@@ -157,8 +154,6 @@ export default function SideNavbar() {
             { href: '/outsourcing/consumables', label: 'Consumables', icon: Boxes, module: 'consumables' },
             { href: '/outsourcing/billing', label: 'Billing', icon: Receipt, module: 'billing' },
             { href: '/outsourcing/finance', label: 'Finance', icon: Wallet, module: 'finance' },
-            { href: '/outsourcing/users', label: 'Users', icon: Users, module: 'users' },
-            { href: '/outsourcing/reviews', label: 'Reviews', icon: Star, module: 'reviews' },
         ],
     };
 
@@ -181,7 +176,7 @@ export default function SideNavbar() {
     };
 
     const navItems = roleNavItems[currentRole] || [];
-    
+
     // Filter nav items based on permissions
     const filteredNavItems = navItems.filter(item => {
         // Always show dashboard
@@ -189,7 +184,7 @@ export default function SideNavbar() {
         // Check if user has access to this module
         return hasModuleAccess(item.module);
     });
-    
+
     const colors = roleColors[currentRole];
     const panelLabel = roleLabels[currentRole];
 

@@ -222,7 +222,7 @@ export default function HospitalsPage() {
                         onClick={(e) => {
                             // Prevent navigation if clicking on action buttons
                             if (e.target.closest('button')) return;
-                            router.push(`/admin/hospitals/${hospital.id}`);
+                            if (user) router.push(`/${user.role}/hospitals/${hospital.id}`);
                         }}
                     >
                         {/* Card Header */}

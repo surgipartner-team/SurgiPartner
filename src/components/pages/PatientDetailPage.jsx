@@ -922,7 +922,7 @@ export default function PatientDetailPage() {
                                         <div>
                                             <div className="flex items-center justify-between mb-4">
                                                 <h3 className="text-lg font-semibold text-gray-900">Payment History</h3>
-                                             {/*   <button
+                                                {/*   <button
                                                     onClick={() => setShowRecordPaymentModal(true)}
                                                     className="px-4 py-2 bg-[#19ADB8] hover:bg-[#17a0ab] text-white rounded-lg font-medium flex items-center gap-2"
                                                 >
@@ -961,13 +961,14 @@ export default function PatientDetailPage() {
                                     ) : (
                                         <div className="text-center py-12">
                                             <p className="text-gray-600 mb-4">Payment history will appear here</p>
-                                            <button
+                                            {/*       <button
                                                 onClick={() => setShowRecordPaymentModal(true)}
                                                 className="px-4 py-2 bg-[#19ADB8] hover:bg-[#17a0ab] text-white rounded-lg font-medium flex items-center gap-2 mx-auto"
                                             >
                                                 <Plus size={18} />
                                                 Record Payment
                                             </button>
+                                            */}
                                         </div>
                                     )}
                                 </div>

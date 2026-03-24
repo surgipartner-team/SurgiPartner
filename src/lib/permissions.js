@@ -2,18 +2,18 @@ import { query } from "@/lib/db";
 
 // Module names for permissions
 export const MODULES = {
+    USERS: 'users',
     LEADS: 'leads',
     PATIENTS: 'patients',
     PIPELINE: 'pipeline',
+    CALENDAR: 'calendar',
     HOSPITALS: 'hospitals',
     MACHINES: 'machines',
     CONSUMABLES: 'consumables',
-    BILLING: 'billing',
     FINANCE: 'finance',
-    USERS: 'users',
-    ANALYTICS: 'analytics',
+    BILLING: 'billing',
     REVIEWS: 'reviews',
-    CALENDAR: 'calendar'
+    ANALYTICS: 'analytics'
 };
 
 // Action types
@@ -31,62 +31,61 @@ export const ACTIONS = {
 // Default permissions by role
 export const DEFAULT_PERMISSIONS = {
     admin: {
+        users: ['view', 'create', 'edit', 'delete'],
         leads: ['view', 'create', 'edit', 'delete', 'assign'],
         patients: ['view', 'create', 'edit', 'delete'],
         pipeline: ['view', 'create', 'manage'],
+        calendar: ['view', 'manage'],
         hospitals: ['view', 'create', 'edit', 'delete'],
         machines: ['view', 'create', 'edit', 'delete'],
         consumables: ['view', 'create', 'edit', 'delete'],
-        billing: ['view', 'create', 'edit', 'delete', 'payments'],
         finance: ['view', 'export'],
-        analytics: ['view', 'export'],
-        users: ['view', 'create', 'edit', 'delete'],
-        calendar: ['view', 'manage'],
-        reviews: ['view', 'delete']
+        billing: ['view', 'create', 'edit', 'delete', 'payments'],
+        reviews: ['view', 'delete'],
+        analytics: ['view', 'export']
     },
     sales: {
         leads: ['view', 'create', 'edit', 'assign'],
         patients: ['view', 'create', 'edit', 'delete'],
         pipeline: ['view', 'create', 'manage'],
+        calendar: ['view'],
         hospitals: ['view'],
         machines: ['view'],
         consumables: ['view'],
         billing: ['view'],
-        analytics: ['view'],
-        calendar: ['view'],
-        users: ['view']
+        analytics: ['view']
     },
     ops: {
         leads: ['view'],
         patients: ['view', 'create', 'edit'],
         pipeline: ['view', 'create', 'manage'],
+        calendar: ['view', 'manage'],
         hospitals: ['view', 'create', 'edit'],
         machines: ['view', 'create', 'edit'],
         consumables: ['view', 'create', 'edit'],
-        billing: ['view'],
         finance: ['view'],
-        analytics: ['view'],
-        calendar: ['view', 'manage']
+        billing: ['view'],
+        analytics: ['view']
     },
     carebuddy: {
         patients: ['view', 'edit'],
         pipeline: ['view', 'create', 'manage'],
+        calendar: ['view'],
         hospitals: ['view'],
         machines: ['view'],
-        consumables: ['view'],
-        calendar: ['view']
+        consumables: ['view']
     },
     accountant: {
-        billing: ['view', 'create', 'edit', 'payments'],
         finance: ['view', 'export'],
+        billing: ['view', 'create', 'edit', 'payments'],
         analytics: ['view', 'export']
     },
     outsourcing: {
         leads: ['view', 'create', 'edit'],
     },
     patient: {
-        reviews: ['create', 'view'],
-        patients: ['view'] // View own data
+        patients: ['view'], // View own data
+        reviews: ['create', 'view']
     }
 };
 

@@ -5,11 +5,13 @@ import Image from 'next/image';
 import axios from 'axios';
 import { API_ENDPOINTS } from '@/lib/constants';
 import { Building2, MapPin, Phone, Mail, User2Icon, Award, Percent, Activity, ArrowLeft, Calendar, Stethoscope, Clock, Briefcase, Package, Receipt } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 export default function HospitalDetailPage({ id }) {
     const router = useRouter();
+    const pathname = usePathname();
+    const role = pathname?.split('/')[1] || 'admin';
     const [hospital, setHospital] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -22,11 +24,11 @@ export default function HospitalDetailPage({ id }) {
             }
         } catch (error) {
             toast.error('Error fetching hospital details');
-            router.push('/admin/hospitals');
+            router.push(`/${role}/hospitals`);
         } finally {
             setLoading(false);
         }
-    }, [id, router]);
+    }, [id, router, role]);
 
     useEffect(() => {
         if (id) {
@@ -241,7 +243,7 @@ export default function HospitalDetailPage({ id }) {
                     <div className="flex items-center gap-3">
                         {hospital.consumables && hospital.consumables.some(c => c.status === 'Unbilled') && (
                             <button
-                                onClick={() => router.push(`/admin/billing?action=generate&hospital_id=${hospital.id}&bill_type=consumables`)}
+                                onClick={() => router.push(`/${role}/billing?action=generate&hospital_id=${hospital.id}&bill_type=consumables`)}
                                 className="flex items-center gap-2 px-3 py-1.5 bg-[#19ADB8] text-white text-sm font-medium rounded-lg hover:bg-[#17a0ab] shadow-sm"
                             >
                                 <Receipt size={16} />
@@ -368,7 +370,7 @@ export default function HospitalDetailPage({ id }) {
                     <div className="flex items-center gap-3">
                         {hospital.assigned_machines && hospital.assigned_machines.some(m => m.status === 'Available') && (
                             <button
-                                onClick={() => router.push(`/admin/billing?action=generate&hospital_id=${hospital.id}&bill_type=machines`)}
+                                onClick={() => router.push(`/${role}/billing?action=generate&hospital_id=${hospital.id}&bill_type=machines`)}
                                 className="flex items-center gap-2 px-3 py-1.5 bg-[#19ADB8] text-white text-sm font-medium rounded-lg hover:bg-[#17a0ab] shadow-sm"
                             >
                                 <Receipt size={16} />

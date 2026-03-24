@@ -34,8 +34,31 @@ export async function GET(request) {
 
         const doc = docs[0];
 
-        // Construct absolute path
+        // Check if the file path is a cloud URL (like Cloudinary)
         let filePath = doc.file_path;
+        
+        if (filePath.startsWith('http://') || filePath.startsWith('https://')) {
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) {
+                    return NextResponse.json({ message: "File not found in cloud storage" }, { status: 404 });
+                }
+                const fileBuffer = await response.arrayBuffer();
+                const disposition = preview === 'true' ? 'inline' : `attachment; filename="${doc.document_name.replace(/"/g, '')}"`;
+                
+                return new NextResponse(fileBuffer, {
+                    headers: {
+                        "Content-Type": doc.document_type || "application/octet-stream",
+                        "Content-Disposition": disposition,
+                    },
+                });
+            } catch (fetchError) {
+                console.error("Error fetching cloud file:", fetchError);
+                return NextResponse.json({ message: "Error fetching loud file", error: fetchError.message }, { status: 500 });
+            }
+        }
+
+        // Construct absolute path for local files
         let absolutePath = path.join(process.cwd(), filePath);
 
         // Security Check: prevent directory traversal
