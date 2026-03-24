@@ -149,6 +149,31 @@ export default function PipelineDetailPage() {
         }
     };
 
+    const handleDocumentDownload = async (docId, isPreview = false, fileName = 'document.pdf') => {
+        try {
+            const toastId = toast.loading(isPreview ? 'Opening...' : 'Downloading...');
+            const url = `/api/v1/documents/download?type=patient&docId=${docId}${isPreview ? '&preview=true' : ''}`;
+            const response = await axios.get(url, { responseType: 'blob' });
+            const blobUrl = URL.createObjectURL(response.data);
+            if (isPreview) {
+                window.open(blobUrl, '_blank');
+            } else {
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.setAttribute('download', fileName);
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            }
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+            toast.dismiss(toastId);
+        } catch (error) {
+            console.error('Error handling doc:', error);
+            toast.dismiss();
+            toast.error('Failed to load document');
+        }
+    };
+
     const fetchPayments = async () => {
         try {
             const response = await axios.get(`/api/v1/pipeline/${caseId}/payments`);
@@ -714,25 +739,20 @@ export default function PipelineDetailPage() {
                                                         >
                                                             <Trash2 size={18} />
                                                         </button>
-                                                        <a
-                                                            href={`/api/v1/documents/download?type=patient&docId=${doc.id}&preview=true`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
+                                                        <button
+                                                            onClick={() => handleDocumentDownload(doc.id, true)}
                                                             className="p-2 hover:bg-blue-50 rounded text-blue-600"
                                                             title="View"
                                                         >
                                                             <Eye size={18} />
-                                                        </a>
-                                                        <a
-                                                            href={`/api/v1/documents/download?type=patient&docId=${doc.id}`}
-                                                            download
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDocumentDownload(doc.id, false, doc.document_name)}
                                                             className="p-2 hover:bg-blue-50 rounded text-blue-600"
                                                             title="Download"
                                                         >
                                                             <Download size={18} />
-                                                        </a>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             ))}

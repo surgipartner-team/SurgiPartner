@@ -1616,6 +1616,31 @@ function LeadDetailDrawer({ lead, onClose }) {
     }
   };
 
+  const handleDocumentDownload = async (docId, isPreview = false, fileName = 'document.pdf') => {
+    try {
+      const toastId = toast.loading(isPreview ? 'Opening...' : 'Downloading...');
+      const url = `/api/v1/documents/download?type=lead&docId=${docId}${isPreview ? '&preview=true' : ''}`;
+      const response = await axios.get(url, { responseType: 'blob' });
+      const blobUrl = URL.createObjectURL(response.data);
+      if (isPreview) {
+        window.open(blobUrl, '_blank');
+      } else {
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+      toast.dismiss(toastId);
+    } catch (error) {
+      console.error('Error handling doc:', error);
+      toast.dismiss();
+      toast.error('Failed to load document');
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-end justify-end z-[60]">
       <div className="bg-white w-full sm:w-96 h-full overflow-y-auto animate-slide-in-right">
@@ -1657,15 +1682,13 @@ function LeadDetailDrawer({ lead, onClose }) {
                         <p className="text-[10px] text-gray-500">{new Date(doc.uploaded_at || Date.now()).toLocaleDateString()}</p>
                       </div>
                     </div>
-                    <a
-                      href={`/api/v1/documents/download?type=lead&docId=${doc.id}&preview=true`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
+                      onClick={() => handleDocumentDownload(doc.id, true)}
                       className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                       title="View Document"
                     >
                       <ViewIcon size={14} />
-                    </a>
+                    </button>
                   </div>
                 ))}
               </div>
